@@ -1,0 +1,23 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: lab-reports
+  datasource:
+    url: jdbc:postgresql://localhost:5455/laboratoryDB 
+    username: root
+    password: admin
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# Hibernate ddl auto (create, create-drop, validate, update)
+    #hibernate:
+      #ddl-auto: update
+    show-sql: true
+  sql:
+    init:
+      mode: always
+      ## Hibernate Properties
+      # The SQL dialect makes Hibernate generate better SQL for the chosen database
