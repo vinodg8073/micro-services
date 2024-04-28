@@ -15,4 +15,7 @@ public class Report extends AuditBaseEntity {
 	private String verifiedBy;
 	private String testedBy;
 	private int issued;
+	private int paymentReceived;
+	private double totalAmount;
+	private double receivedAmount;
 }
