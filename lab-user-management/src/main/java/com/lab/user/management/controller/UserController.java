@@ -12,14 +12,39 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lab.user.management.dto.UserDetails;
 import com.lab.user.management.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping(path = "/api/v1", produces = { MediaType.APPLICATION_JSON_VALUE })
+@Tag(
+        name = "CRUD REST APIs for Lab user management",
+        description = "CRUD REST APIs to CREATE, UPDATE, FETCH AND DELETE lab user details"
+)
 public class UserController {
 	
 	@Autowired
 	private UserService userService;
 	
 	@GetMapping("/getUserDetails/{userId}")
+	  @Operation(
+	            summary = "Fetch user details REST API",
+	            description = "REST API to fetch lab user details"
+	    )
+	    @ApiResponses({
+	            @ApiResponse(
+	                    responseCode = "200",
+	                    description = "HTTP Status OK"
+	            ),
+	            @ApiResponse(
+	                    responseCode = "204",
+	                    description = "HTTP Status NO CONTENT"
+	            )
+	    })
 	public ResponseEntity<UserDetails> getUserDetails(@PathVariable int userId){
 		var userDetails = userService.getUserDetailsById(userId);
 		if (userDetails == null)
