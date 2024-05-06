@@ -72,8 +72,8 @@ public class UserService {
 
 	public boolean createUser(User user) {
 		int userId = user.getUserId();
-		User existingUser = userRepository.findById(userId).get();
-		if (existingUser != null)
+		var existingUser = userRepository.findById(userId);
+		if (!existingUser.isEmpty())
 			return false;
 
 		userRepository.save(user);
@@ -82,8 +82,8 @@ public class UserService {
 	}
 
 	public boolean deleteUser(int userId) {
-		User existingUser = userRepository.findById(userId).get();
-		if (existingUser == null)
+		var existingUser = userRepository.findById(userId);
+		if (existingUser.isEmpty())
 			return false;
 		List<UserRoles> roles = userRoleRepository.findByUserId(userId);
 		if (!roles.isEmpty())
