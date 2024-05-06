@@ -15,13 +15,19 @@ import com.lab.user.management.dto.UserDetailsDTO;
 import com.lab.user.management.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping(path = "/api/v1", produces = { MediaType.APPLICATION_JSON_VALUE })
-@Tag(name = "CRUD REST APIs for Lab user management", description = "CRUD REST APIs to CREATE, UPDATE, FETCH AND DELETE lab user details")
+
+@Tag(
+        name = "CRUD REST APIs for Lab user management",
+        description = "CRUD REST APIs to CREATE, UPDATE, FETCH AND DELETE lab user details"
+)
 public class UserController {
 
 	@Autowired
