@@ -37,3 +37,4 @@ CMD ["java", "-jar", "lab-reports-0.0.1-SNAPSHOT.jar"]
 
 # run the containers
 #docker run -d --name laboratoryDB-e POSTGRES_USER=root  -e POSTGRES_PASSWORD=admin -p 5432:5432 postgres:latest
+#docker run -d --name lab-reports -p 8080:8080 vinodg8073/lab_report:v1
