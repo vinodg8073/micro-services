@@ -8,7 +8,7 @@ spring:
   application:
     name: lab-reports
   datasource:
-    url: jdbc:postgresql://localhost:5455/laboratoryDB 
+    url: jdbc:postgresql://localhost:5432/laboratoryDB 
     username: root
     password: admin
   jpa:

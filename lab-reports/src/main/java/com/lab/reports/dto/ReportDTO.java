@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data @AllArgsConstructor @NoArgsConstructor
 public class ReportDTO {
 	
-	private int id;
+	private long id;
 	private LocalDateTime date;
 	private String verifiedBy;
 	private int issued;
