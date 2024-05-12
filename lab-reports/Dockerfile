@@ -32,9 +32,11 @@ COPY --from=build /app/target/lab-reports-0.0.1-SNAPSHOT.jar .
 CMD ["java", "-jar", "lab-reports-0.0.1-SNAPSHOT.jar"]
 #CMD ["mvn", "mvn spring-boot:run"]
 
-#command to create image
+# command to create image
 # docker build . -t vinodg8073/lab_report:v1
+# mvn spring-boot:build-image
 
 # run the containers
-#docker run -d --name laboratoryDB -e POSTGRES_DB=laboratoryDB -e POSTGRES_USER=root  -e POSTGRES_PASSWORD=admin -p 5432:5432 postgres:latest
-#docker run -d --name lab-reports -p 8080:8080 vinodg8073/lab_report:v1
+# docker run -d --name laboratoryDB -e POSTGRES_DB=laboratoryDB -e POSTGRES_USER=root  -e POSTGRES_PASSWORD=admin -p 5432:5432 postgres:latest
+# docker run -d --name lab-reports -p 8080:8080 vinodg8073/lab_report:v1
+# docker run -d --name lab-user-management -p 8081:8081 lab-user-management:0.0.1-SNAPSHOT
