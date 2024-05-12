@@ -6,7 +6,7 @@ spring:
   application:
     name: lab-user-management
   datasource:
-    url: jdbc:postgresql://localhost:5455/laboratoryDB 
+    url: jdbc:postgresql://localhost:5432/laboratoryDB 
     username: root
     password: admin
   jpa:
