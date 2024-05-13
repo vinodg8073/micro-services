@@ -1,0 +1,44 @@
+services:
+  laboratoryDB:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=laboratoryDB
+    volumes:
+      - laboratoryData:/var/lib/postgres/data/
+    networks:
+      - laboratory
+  
+  lab-user-management:
+    image: lab-user-management:0.0.1-SNAPSHOT
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://laboratoryDB:5432/laboratoryDB
+    networks:
+      - laboratory
+
+  lab-reports:
+    image: vinodg8073/lab_report:v1
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://laboratoryDB:5432/laboratoryDB
+    networks:
+      - laboratory
+  #    extends:                                        ------ To add a common configuration
+  #     service: laboratory-deploy-service
+                                                        
+  # laboratory-deploy-service:
+  #   networks:
+  #     - laboratory
+
+networks:
+  laboratory:
+    driver: "bridge"
+
+volumes:
+  laboratoryData:
