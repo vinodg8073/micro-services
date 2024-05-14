@@ -11,6 +11,11 @@ services:
       - laboratoryData:/var/lib/postgres/data/
     networks:
       - laboratory
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
   
   lab-user-management:
     image: lab-user-management:0.0.1-SNAPSHOT
@@ -22,17 +27,24 @@ services:
       - laboratory
 
   lab-reports:
-    image: vinodg8073/lab_report:v1
+    #image: vinodg8073/lab_report:v1
+    build: lab-reports/          # searches for Dockerfile and builds the image and starts the container. So no need to manually run docker build
     ports:
       - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://laboratoryDB:5432/laboratoryDB
     networks:
       - laboratory
+    depends_on:            # service depends on other and wait untill laboratoryDB is started and is healthy then starts reports service
+      laboratoryDB:
+        condition: service_healthy      # Health check should be defined for the service or else you can also simply add "- laboratoryDB" under "depends_on:"
+
+
   #    extends:                                        ------ To add a common configuration
+  #     file: someFileName.yml                         ------ to load the service common configuration
   #     service: laboratory-deploy-service
                                                         
-  # laboratory-deploy-service:
+  # laboratory-deploy-service:                         ------ commom configuration
   #   networks:
   #     - laboratory
 
