@@ -1,6 +1,8 @@
 package com.lab.user.management.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lab.user.management.dto.CodeOwner;
 import com.lab.user.management.dto.UserDetailsDTO;
 import com.lab.user.management.entity.User;
 import com.lab.user.management.service.UserService;
@@ -30,7 +33,16 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private Environment environment;
+	
+	@Autowired
+	private CodeOwner codeOwnerDetails;
 
+	@Value("${build.version}")
+	String buildVersion;
+	
 	@GetMapping("/getUserDetails/{userId}")
 	@Operation(summary = "Fetch user details REST API", description = "REST API to fetch lab user details")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "HTTP Status OK"),
@@ -85,5 +97,26 @@ public class UserController {
 		if (deleted)
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("User saved successfully");
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Could not save. check if the user already present");
+	}
+	
+	@GetMapping("/build-version")
+	@Operation(summary = "Fetch build version", description = "API to fetch build version from internal (application.yml) configurations")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "HTTP Status OK") })
+	public ResponseEntity<String> getBuildVersion(){
+		return ResponseEntity.status(HttpStatus.OK).body("Build-Version : " +buildVersion);
+	}
+	
+	@GetMapping("/java-path")
+	@Operation(summary = "Fetch JAVA_HOME path", description = "API to fetch JAVA_HOME path from external configuration (system environment variables)")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "HTTP Status OK") })
+	public ResponseEntity<String> getJavaHomePath(){
+		return ResponseEntity.status(HttpStatus.OK).body("Java-Version : " +environment.getProperty("JAVA_HOME"));
+	}
+	
+	@GetMapping("/code-owner")
+	@Operation(summary = "Fetch code owner details", description = "API to fetch code owner details from internal (application.yml) configurations")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "HTTP Status OK") })
+	public ResponseEntity<CodeOwner> getCodeOwnerDetails(){
+		return ResponseEntity.status(HttpStatus.OK).body(codeOwnerDetails);
 	}
 }

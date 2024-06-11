@@ -16,4 +16,12 @@ spring:
     show-sql: true
   sql:
     init:
-      mode: always   
+      mode: always  # executes the schema.sql @ startup. but automatically executed if H2 db is used.
+build:
+  version: "1.0"
+code-owner:
+  name: vinod g
+  email: vinodgowda1998@gmail.com
+  contact:
+    - xxxxxx9494
+    - xxxxxx1234   
