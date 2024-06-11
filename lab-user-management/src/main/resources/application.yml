@@ -17,6 +17,13 @@ spring:
   sql:
     init:
       mode: always  # executes the schema.sql @ startup. but automatically executed if H2 db is used.
+  config:
+    import:
+    - "application_qa.yml"
+    - "application_prod.yml"
+#  profiles:     #Disadvantage : activates list of profile but is hardcoded (need to  generate the docker image for each environment). therefore pass external configuration (cli arguments) to activate  the profile
+#    active:     # Example args using cli, jvm, env variables 
+#    - "qa"      # cli (more preceding/priority) => java -jar xxx.jar --spring.profiles.active=prod || jvm => java -Dspring.profiles.active=prod -jar xxx.jar || env:SPRING_PROFILES_ACTIVE=prod; java -jar xxx.jar 
 build:
   version: "1.0"
 code-owner:
