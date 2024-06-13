@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: "config-server"
+  profiles:
+    active: native # activating the native profile of SCCS (USED WHEN WE STORE CONFIGS IN CLASS PATH)
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: "classpath:/config"  # scc server load all the properties from the classspath resources/config location. Run the application to check 
+server:
+  port: 8091
