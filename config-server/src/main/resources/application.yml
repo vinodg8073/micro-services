@@ -18,3 +18,6 @@ spring:
 #          force-pull: true  #(at startup pulls latest changes when already cloned config has some changes made )
 server:
   port: 8091
+    
+encrypt:
+  key: 373HDS3828SHS7 # Any complex value || at real time configured from external
