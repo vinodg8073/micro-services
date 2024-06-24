@@ -2,11 +2,19 @@ spring:
   application:
     name: "config-server"
   profiles:
-    active: native # activating the native profile of SCCS (USED WHEN WE STORE CONFIGS IN CLASS PATH)
+    active: native # activating the native profile of SCCS (USED WHEN WE STORE CONFIGS IN CLASS/FILE PATH)
+#    active: git
   cloud:
     config:
       server:
         native:
           search-locations: "classpath:/config"  # scc server load all the properties from the classspath resources/config location. Run the application to check 
+          #search-locations: "file:///D://MicroServices//Config" Load from file system||config file located at server location where MS is deployed. Advangtage : security to that folder to restrict user
+#        git:    # Advantage: versioning to track previous changes || Read official docs to learn more https://docs.spring.io/spring-cloud-config/reference/server.html
+#          uri: "https://github.com/vinodg8073/ms-configurations.git"
+#          default-label: main #default branch
+#          timeout: 5
+#          clone-on-start: true #clone github repo at startup (if not provided clones at first request disadvantage: sometimes CS can be started but couldn't load the configs')
+#          force-pull: true  #(at startup pulls latest changes when already cloned config has some changes made )
 server:
   port: 8091
