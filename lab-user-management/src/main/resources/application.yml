@@ -41,3 +41,9 @@ code-owner:
   contact:
     - xxxxxx9494
     - xxxxxx1234   
+
+#management:  # by default actuator doesn't expose
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"     #Enable & expose management related api paths(actuator api's)
