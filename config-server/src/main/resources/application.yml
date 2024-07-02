@@ -16,8 +16,22 @@ spring:
 #          timeout: 5
 #          clone-on-start: true #clone github repo at startup (if not provided clones at first request disadvantage: sometimes CS can be started but couldn't load the configs')
 #          force-pull: true  #(at startup pulls latest changes when already cloned config has some changes made )
+
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "guest"
+    password: "guest"
+    
+# To hit /monitor api (CS uses Spring cloud bus) || create github webhook to hit the api when changes made on config properties repository
+management:  
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+         
 server:
   port: 8091
     
-encrypt:
+encrypt:     #Can encript, decrypt using same application based on below key using /encrypt , /decrypt endpoint
   key: 373HDS3828SHS7 # Any complex value || at real time configured from external
