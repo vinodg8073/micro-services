@@ -1,0 +1,27 @@
+services:
+  network-deploy-services: # seperated from microservice_base_configs because rabitmq
+    networks:  
+      - laboratory
+  
+  base_configs: 
+    extends:
+      service: network-deploy-services
+    deploy:
+      resources: 
+        limits:
+          memory: 700m
+    environment:
+      SPRING_RABITMQ_HOST: "rabitmq" # This is service name not hostname for connection application.properties
+      
+  microservice_depends_on_configs:
+    extends:
+      service: base_configs
+    environment:
+      SPRING_CONFIG_IMPORT: configserver:http://configServer:8091/
+      SPRING_DATASOURCE_URL: jdbc:postgresql://laboratoryDB:5432/laboratoryDB
+      SPRING_PROFILES_ACTIVE: default  # set and use default env configs files while running locally
+    depends_on:            # service depends on other and wait untill laboratoryDB is started and is healthy then starts micro service
+      laboratoryDB:
+        condition: service_healthy      # Health check should be defined for the service or else you can also simply add "- laboratoryDB" under "depends_on:"
+      configServer:
+        condition: service_healthy  
