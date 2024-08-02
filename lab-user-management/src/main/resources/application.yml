@@ -25,11 +25,11 @@ spring:
     active: "prod"  # or pass from external config
 
 # MQ connection same for other microservices. By default it has below values no need to configure   
-  rabbitmq:
-    host: "localhost"
-    port: 5672
-    username: "guest"
-    password: "guest"
+#  rabbitmq:
+#    host: "localhost"
+#    port: 5672
+#    username: "guest"
+#    password: "guest"
 
 ### Read configs from Spring profiles           
 #  config:                    # commented out to use SCCS to read the configurations

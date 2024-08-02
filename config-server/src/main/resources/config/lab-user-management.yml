@@ -26,4 +26,39 @@ code-owner:
     - xxxxxx9494
     - xxxxxx1234  
 
-#Note: profile related configurations are removed since we are overcoming that approach and also file names are kept as microservice names to identify. 
+#Note: profile related configurations are removed since we are overcoming that approach and also file names are kept as microservice names to identify.
+
+eureka:
+  instance:
+    preferIpAddress: true # by default while registering it registers with hostname (makes sense when DNS mapping but not in local)
+  client:
+    fetch-registry: true # try to fetch the registery details of other microservices when needed to connects
+    register-with-eureka: true # to register with eureka server and expose details into registry of service discovery
+    service-url:
+      defaultZone: http://localhost:8092/eureka/ 
+
+
+# Information displayed on eureka dashboard
+info:
+  app:
+    name: "lab-user-management"
+    description: "User management application"
+    version: "1.0"
+
+# the above information will be exposed as an actuator endpoint url
+#by default info related actuator endpoint is not enabled
+management:  # by default actuator doesn't expose
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:  #enabled info related actuator endpoint
+    env:
+      enabled: true
+  endpoint: #Enable shutdown related actuator endpoint (but not exposed -- see below)and allow to shutdown gracefully
+    shutdown:
+      enabled: true 
+#To expose the shutdown related api endpoints
+endpoints:
+  shutdown:
+    enabled: true
