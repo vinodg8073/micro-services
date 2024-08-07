@@ -3,13 +3,12 @@ package com.lab.reports.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lab.reports.dto.ReportDTO;
 import com.lab.reports.entity.Report;
-import com.lab.reports.mapper.CustomMapper;
+import com.lab.reports.mapper.PatientReportMapper;
 import com.lab.reports.repository.ReportRepository;
 
 @Service
@@ -25,8 +24,8 @@ public class ReportService {
 
 		List<ReportDTO> reportDTOs = new ArrayList<ReportDTO>();
 
-		reports.forEach(r -> reportDTOs.add(CustomMapper.MAPPER.convertReportDTO(r)));
-
+		reports.forEach(r -> reportDTOs.add(PatientReportMapper.MAPPER.toReportDTO(r,r.getReportResult())));
+		System.out.println(reportDTOs.get(0).toString());	
 		return reportDTOs;
 	}
 }
