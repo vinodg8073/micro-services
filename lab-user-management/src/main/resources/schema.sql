@@ -22,42 +22,43 @@ CREATE TABLE IF NOT EXISTS user_roles (
     role_id INT
 );
 
--- truncate table lab_users;
--- truncate table user_type;
--- truncate table lab_roles;
--- truncate table user_roles;
+truncate table lab_users;
+truncate table user_type;
+truncate table lab_roles;
+truncate table user_roles;
 
--- INSERT INTO lab_users (user_id, name, active, password)
--- VALUES 
---     (1,'ABC', 1, 'password123'),
---     (2, 'XYZ', 0, 'pass321')
---     ON CONFLICT (user_id) do update  SET
---      name = EXCLUDED.name,
---     active = EXCLUDED.active,
---     password = EXCLUDED.password;
+INSERT INTO lab_users (user_id, name, active, password,user_type_id)
+VALUES 
+    (1,'ABC', 1, 'password123',3),
+    (2, 'XYZ', 0, 'pass321',3)
+    ON CONFLICT (user_id) do update  SET
+     name = EXCLUDED.name,
+    active = EXCLUDED.active,
+    password = EXCLUDED.password;
 
--- INSERT INTO user_type (user_type_id, user_type_description)
--- VALUES 
---     (1,'Admin'),
---     (2,'Patient')
--- ON CONFLICT (user_type_id) DO UPDATE 
--- SET 
---     user_type_description = EXCLUDED.user_type_description;
+INSERT INTO user_type (user_type_id, user_type_description)
+VALUES 
+    (1,'Admin'),
+    (2,'Technician'),
+    (3,'Patient')
+ON CONFLICT (user_type_id) DO UPDATE 
+SET 
+    user_type_description = EXCLUDED.user_type_description;
 
 
--- INSERT INTO lab_roles (role_id,role)
--- VALUES 
---     (1,'Edit'),
---     (2,'view')
--- ON CONFLICT (role_id) DO UPDATE 
--- SET 
---     role = EXCLUDED.role;
+INSERT INTO lab_roles (role_id,role)
+VALUES 
+    (1,'Edit'),
+    (2,'view')
+ON CONFLICT (role_id) DO UPDATE 
+SET 
+    role = EXCLUDED.role;
    
--- INSERT INTO user_roles (id ,user_id, role_id)
--- VALUES 
---     (1,1, 1),
---     (2,1, 2),
---     (3,2, 2)
---     on conflict (id) do update set 
---     user_id = EXCLUDED.user_id,
---     role_id  = EXCLUDED.role_id;
+INSERT INTO user_roles (id ,user_id, role_id)
+VALUES 
+    (1,1, 1),
+    (2,1, 2),
+    (3,2, 3)
+    on conflict (id) do update set 
+    user_id = EXCLUDED.user_id,
+    role_id  = EXCLUDED.role_id;
