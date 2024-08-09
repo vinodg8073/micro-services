@@ -36,7 +36,7 @@ public class UserService {
 		List<Integer> userRoleIds = new ArrayList<Integer>();// userRoleRepository.getRoleIdsByUserId(userId);
 		userRoleRepository.findByUserId(userId).forEach(ur -> userRoleIds.add(ur.getRoleId()));
 		List<Roles> userRoles = rolesRepository.findAllById(userRoleIds);
-		String userTypeDescription = userTypeRepository.findById(userId).get().getUserTypeDescription();
+		String userTypeDescription = userTypeRepository.findById(user.getUserTypeId()).get().getUserTypeDescription();
 
 		UserDetailsDTO userDetails = UserMapper.MAPPER.getUserDetails(user, userRoles, userTypeDescription);
 		return userDetails;
