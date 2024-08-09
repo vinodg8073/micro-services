@@ -14,5 +14,5 @@ public class ReportDTO {
     private String result;
     private List<String> testNames;
     private String paymentDue;
-    private int issued;
+    private String issued;
 }

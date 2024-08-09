@@ -56,8 +56,8 @@ INSERT INTO lab_tests (test_name) VALUES
 ('CT Scan');
 
 INSERT INTO lab_reports (patient_id, verified_by, tested_by, issued, payment_received, total_amount, received_amount, created_date, created_by, updated_date, updated_by) VALUES
-(1, 'Dr. Smith', 'Dr. Johnson', 5, 0, 250.00, 250.00, CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, 'admin'),
-(1, 'Dr. Adams', 'Dr. Lee', 2, 1, 150.00, 100.00, CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, 'admin'),
+(1, 'Dr. Smith', 'Dr. Johnson', 1, 0, 250.00, 250.00, CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, 'admin'),
+(1, 'Dr. Adams', 'Dr. Lee', 0, 1, 150.00, 100.00, CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, 'admin'),
 (3, 'Dr. Brown', 'Dr. Wilson', 1, 0, 300.00, 300.00, CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, 'admin');
 
 INSERT INTO lab_report_results (result, report_id, created_date, created_by, updated_date, updated_by) VALUES

@@ -23,7 +23,7 @@ public interface PatientReportMapper {
         @Mapping(source = "reportResult.result", target = "result"),
         @Mapping(source = "report.testDetails", target = "testNames", qualifiedByName = "testDetailsToTestNames"),
         @Mapping(source = "report.paymentReceived", target = "paymentDue",qualifiedByName = "paymentReceivedToYesNO"),
-        @Mapping(source = "report.issued", target = "issued")
+        @Mapping(source = "report.issued", target = "issued",qualifiedByName = "numberToYesNO")
     })
 	ReportDTO toReportDTO(Report report, ReportResult reportResult);
 	
@@ -37,5 +37,10 @@ public interface PatientReportMapper {
 	@org.mapstruct.Named("paymentReceivedToYesNO")
     default String mapPaymentReceivedToYesNo(int paymentReceived) {
         return paymentReceived == 1 ? "No" : "Yes";
+    }
+	
+	@org.mapstruct.Named("numberToYesNO")
+    default String numberToYesNO(int number) {
+        return number == 1 ? "Yes" : "No";
     }
 }
