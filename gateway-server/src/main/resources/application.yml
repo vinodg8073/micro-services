@@ -8,7 +8,7 @@ spring:
       discovery: # telling gateway server to connect with SD eureka server and locate all the details from microservices
         locator:
           enabled: true  # levarage the info present in SD eureka to forward all the request 
-          lowerCaseServiceId: true
+          lowerCaseServiceId: true  # converts the path of logical app name to lower case
 
 management:  
   endpoints:
