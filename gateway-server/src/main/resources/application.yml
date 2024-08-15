@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: gateway-server
+  config:          
+    import: "optional:configserver:http://localhost:8091/"
+  cloud:
+    gateway:
+      discovery: # telling gateway server to connect with SD eureka server and locate all the details from microservices
+        locator:
+          enabled: true  # levarage the info present in SD eureka to forward all the request 
+          lowerCaseServiceId: true  # converts the path of logical app name to lower case
+
+management:  
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      enabled: true
+  info:  
+    env:
+      enabled: true
+  
+info:
+  app:
+    name: "gateway-server"
+    description: "Entry point - API gateway for lab application"
+    version: "1.0"
+     
