@@ -1,11 +1,14 @@
 package com.lab.user.management.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +27,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 public class UserPageController {
 	
+	private static final Logger logger = LoggerFactory.getLogger(UserPageController.class);
+	
 	@Autowired
 	private IUserDetailsPageService userDetailsPageService;
 	
@@ -31,7 +36,8 @@ public class UserPageController {
 	@Operation(summary = "Fetch complete user details REST API", description = "REST API to fetch complete lab user details")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "HTTP Status OK"),
 			@ApiResponse(responseCode = "204", description = "HTTP Status NO CONTENT") })
-	public ResponseEntity<UserDetailsPageDTO> getUserDetails(@PathVariable int userId) {
+	public ResponseEntity<UserDetailsPageDTO> getUserDetails(@PathVariable int userId, @RequestHeader("tracking-id") String trackingId) {
+		logger.debug("tracking-id received in UserPageController : {}", trackingId);
 		var userDetails = userDetailsPageService.getCompleteUserDetails(userId);
 		if (userDetails == null)
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(userDetails);

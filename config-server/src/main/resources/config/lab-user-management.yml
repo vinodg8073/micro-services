@@ -62,3 +62,9 @@ management:  # by default actuator doesn't expose
 endpoints:
   shutdown:
     enabled: true
+logging:
+  level:
+    com:
+      lab:
+        user:
+          management: DEBUG
