@@ -21,6 +21,10 @@ public class GatewayServerApplication {
 						.filters(
 								f->f.rewritePath("/lab/(?<segment>.*)","/${segment}")  //SEGMENT IS THE BASE PATH OF MS
 								.addResponseHeader("custom", "value")
+								.circuitBreaker(
+										config -> config.setName("usermanagementCircuitBreaker")  // Can have multiple CB for an API/MS. The name is used to configure the properties specifically/default
+										.setFallbackUri("/support")  //[FALLBACK MECHANISM] Sends a custom response instead of runtime exception
+										)
 								)
 						.uri("lb://LAB-USER-MANAGEMENT")  //LB-> GATEWAY DOES CLIENT SIDE LOAD BALANCING BASED ON APP NAME IN EUREKA
 						)
