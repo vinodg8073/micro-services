@@ -17,6 +17,10 @@ spring:
   sql:
     init:
       mode: always  # executes the schema.sql @ startup. but automatically executed if H2 db is used.
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
 
 ### Read configs from SCCS  
   config:                                                   # reads based on application.name and profile.active
@@ -54,3 +58,11 @@ code-owner:
 #    web:
 #      exposure:
 #        include: "*"     #Enable & expose management related api paths(actuator api's)
+
+resilience4j.circuitbreaker:
+    configs:
+      default:   #applicable for all CB names and can also define for specific CB based on names set
+        sliding-window-size: 10  #How many request to be monitored before Changing state from CLOSED to OPEN
+        permitted-number-of-calls-in-half-open-state: 2 # Num.. of request to be allowed by HALF_OPEN state to decide and transit next state OPEN/CLOSED
+        failure-rate-threshold: 50  # percentage of failed request (sliding-window-size) to change the state from CLOSED to OPEN
+        wait-duration-in-open-state: 1000  # in ms remain in the open state for 1 second before transitioning to a half-open state to check if the service has recovered by allowing (permitted-number-of-calls-in-half-open-state) requests
