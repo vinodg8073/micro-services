@@ -1,5 +1,7 @@
 package com.lab.user.management.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -31,6 +33,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "CRUD REST APIs for Lab user management", description = "CRUD REST APIs to CREATE, UPDATE, FETCH AND DELETE lab user details")
 public class UserController {
 
+	private static final Logger logger = LoggerFactory.getLogger( UserController.class);
 	@Autowired
 	private UserService userService;
 	
@@ -117,6 +120,8 @@ public class UserController {
 	@Operation(summary = "Fetch code owner details", description = "API to fetch code owner details from internal (application.yml) configurations")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "HTTP Status OK") })
 	public ResponseEntity<CodeOwner> getCodeOwnerDetails(){
-		return ResponseEntity.status(HttpStatus.OK).body(codeOwnerDetails);
+		logger.debug("Called user-management app code-owner contoller");
+		throw new RuntimeException();
+//		return ResponseEntity.status(HttpStatus.OK).body(codeOwnerDetails);
 	}
 }
