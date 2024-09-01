@@ -60,6 +60,7 @@ public class GatewayServerApplication {
 		//NOTE: Disable discover locator to avoid default routing configuration. Java based configure is more flexible than yml based route configuration
 	}
 	
+	//To change default configurations of Circuit breaker timeout
 	@Bean
 	public Customizer<ReactiveResilience4JCircuitBreakerFactory> defaultCustomizer() {
 		return factory -> factory.configureDefault(id -> new Resilience4JConfigBuilder(id)

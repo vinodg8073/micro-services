@@ -22,6 +22,7 @@ import com.lab.user.management.dto.UserDetailsDTO;
 import com.lab.user.management.entity.User;
 import com.lab.user.management.service.UserService;
 
+import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -109,13 +110,22 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body("Build-Version : " +buildVersion);
 	}
 	
+	@Retry(name = "getJavaHomePath", fallbackMethod = "getJavaHomePathFallBack")
 	@GetMapping("/java-path")
 	@Operation(summary = "Fetch JAVA_HOME path", description = "API to fetch JAVA_HOME path from external configuration (system environment variables)")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "HTTP Status OK") })
 	public ResponseEntity<String> getJavaHomePath(){
-		return ResponseEntity.status(HttpStatus.OK).body("Java-Version : " +environment.getProperty("JAVA_HOME"));
+		logger.debug("Called user-management getJavaHomePath");
+		throw new NullPointerException();
+		//return ResponseEntity.status(HttpStatus.OK).body("Java-Version : " +environment.getProperty("JAVA_HOME"));
 	}
 	
+	//method signature should be same as retry method
+	public ResponseEntity<String> getJavaHomePathFallBack(Throwable throwable)//this is additional parameter along with retry method params
+	{
+		logger.debug("Called user-management getJavaHomePathFallBack");
+		return  ResponseEntity.status(HttpStatus.OK).body("Default java ");
+	}
 	@GetMapping("/code-owner")
 	@Operation(summary = "Fetch code owner details", description = "API to fetch code owner details from internal (application.yml) configurations")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "HTTP Status OK") })
