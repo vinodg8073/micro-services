@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.circuitbreaker.resilience4j.ReactiveResilience4JCircuitBreakerFactory;
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder;
 import org.springframework.cloud.client.circuitbreaker.Customizer;
+import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
+import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpMethod;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.timelimiter.TimeLimiterConfig;
+import reactor.core.publisher.Mono;
 
 
 @SpringBootApplication
@@ -44,6 +47,9 @@ public class GatewayServerApplication {
 										//args[2]-> multiplied by the specified factor example, after the first failure, the wait time will be 100 milliseconds, then 200 milliseconds (100 * 2), then 400 milliseconds (200 * 2), and so on, until it reaches the maximum of 1000 milliseconds.
 										//args[3]-> tells GS to apply factor of previous or initial back off value
 										)
+								.requestRateLimiter(
+										config -> config.setRateLimiter(redisRateLimiter())  
+														.setKeyResolver(userKeyResolver()))
 								)
 						.uri("lb://LAB-USER-MANAGEMENT")  //LB-> GATEWAY DOES CLIENT SIDE LOAD BALANCING BASED ON APP NAME IN EUREKA
 						//change in code + call metadata method and pass the key value to set the timeout for specific path
@@ -66,5 +72,17 @@ public class GatewayServerApplication {
 		return factory -> factory.configureDefault(id -> new Resilience4JConfigBuilder(id)
 				.circuitBreakerConfig(CircuitBreakerConfig.ofDefaults())
 				.timeLimiterConfig(TimeLimiterConfig.custom().timeoutDuration(Duration.ofSeconds(4)).build()).build());
+	}
+	
+	//Dependency on Redis cache which needs to be started before starting the app
+	@Bean
+	public RedisRateLimiter redisRateLimiter() {
+		return new RedisRateLimiter(1, 1, 1);  //To make only one request/second based on replenishRate, burstCapacity, requestedToken for one user_id
+	}
+
+	@Bean
+	KeyResolver userKeyResolver() {
+		return exchange -> Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst("user_id"))
+				.defaultIfEmpty("0");
 	}
 }

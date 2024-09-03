@@ -41,3 +41,4 @@ CMD ["java", "-jar", "lab-reports-0.0.1-SNAPSHOT.jar"]
 # docker run -d --name lab-reports -p 8080:8080 vinodg8073/lab_report:v1
 # docker run -d --name lab-user-management -p 8081:8081 lab-user-management:0.0.1-SNAPSHOT
 # docker run -it --rm --name rabbitmq -d -p 5672:5672 -p 15672:15672 rabbitmq:3.13-management
+# docker run --name laboratory -d -p 6379:6379 redis
