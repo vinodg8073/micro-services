@@ -112,7 +112,7 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body("Build-Version : " +buildVersion);
 	}
 	
-	public ResponseEntity<String> builVersionFallBack(){
+	public ResponseEntity<String> builVersionFallBack(Throwable throwable){
 		return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("Please try after some time.");
 	}
 	
