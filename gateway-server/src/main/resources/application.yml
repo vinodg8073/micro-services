@@ -13,7 +13,12 @@ spring:
 #      httpclient:  #applicable for all paths except circuit breaker configued [Can also specify to path for route in CB filter configs]
 #        connect-timeout: 1000  #Time take by gateway server to get connection w/ microservice
 #        response-timeout: 3s #Max time to receive response from microservice
-        
+  data:
+    redis:
+      connect-timeout: 2s
+      host: localhost
+      port: 6379
+      timeout: 1s     
 management:  
   endpoints:
     web:

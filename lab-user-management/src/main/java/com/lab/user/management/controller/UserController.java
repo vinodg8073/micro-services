@@ -22,6 +22,7 @@ import com.lab.user.management.dto.UserDetailsDTO;
 import com.lab.user.management.entity.User;
 import com.lab.user.management.service.UserService;
 
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -103,11 +104,16 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Could not save. check if the user already present");
 	}
 	
+	@RateLimiter(name="buildVersion", fallbackMethod = "builVersionFallBack")
 	@GetMapping("/build-version")
 	@Operation(summary = "Fetch build version", description = "API to fetch build version from internal (application.yml) configurations")
 	@ApiResponses({ @ApiResponse(responseCode = "200", description = "HTTP Status OK") })
 	public ResponseEntity<String> getBuildVersion(){
 		return ResponseEntity.status(HttpStatus.OK).body("Build-Version : " +buildVersion);
+	}
+	
+	public ResponseEntity<String> builVersionFallBack(){
+		return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("Please try after some time.");
 	}
 	
 	@Retry(name = "getJavaHomePath", fallbackMethod = "getJavaHomePathFallBack")

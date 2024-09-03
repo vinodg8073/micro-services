@@ -79,4 +79,10 @@ resilience4j.retry:
       retryExceptions:  #Retry happens only for these excpetions and ignored configs will automatically be removed
         - java.util.concurrent.TimeoutException
         - java.lang.NullPointerException
-        
+
+resilience4j.ratelimiter:
+  configs:
+    default:
+      timeoutDuration: 1000
+      limitRefreshPeriod: 5000   # for every 5 seconds accepts only 1 request. If 2nd request is made within that and timeout happens default error thrown or fallback mechanism works
+      limitForPeriod: 1        
