@@ -25,6 +25,8 @@ RUN mvn package -DskipTests
 # Use a new stage for the runtime image
 FROM openjdk:17-jdk-slim
 
+RUN apt-get update && apt-get install -y curl
+
 # Copy the JAR file from the previous stage to the runtime image
 COPY --from=build /app/target/*.jar lab-reports.jar
 
