@@ -1,7 +1,7 @@
 # Use an OpenJDK base image
 FROM openjdk:17-jdk-slim AS build
 
-# Install Maven and curl
+# Install Maven and curl - Using curl command to execute health check for depends_on while starting container + download lombok jar
 RUN apt-get update && apt-get install -y maven curl
 
 # First part Downloads Lombok JAR and second part install it
@@ -26,15 +26,16 @@ RUN mvn package -DskipTests
 FROM openjdk:17-jdk-slim
 
 # Copy the JAR file from the previous stage to the runtime image
-COPY --from=build /app/target/lab-reports-0.0.1-SNAPSHOT.jar .
+COPY --from=build /app/target/*.jar lab-reports.jar
 
 # Specify the command to run your application
-CMD ["java", "-jar", "lab-reports-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "lab-reports.jar"]
 #CMD ["mvn", "mvn spring-boot:run"]
 
 # command to create image
 # docker build . -t vinodg8073/lab_report:v1
 # mvn spring-boot:build-image
+# mvn compile jib:dockerBuild
 
 # run the containers
 # docker run -d --name laboratoryDB -e POSTGRES_DB=laboratoryDB -e POSTGRES_USER=root  -e POSTGRES_PASSWORD=admin -p 5432:5432 postgres:latest

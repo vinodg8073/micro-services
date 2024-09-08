@@ -1,32 +1,32 @@
 services:
   
-  rabitmq:
-    image: rabbitmq:3.13-management
-    hostname: rabitmq
-    ports: 
-      - "5672:5672"
-      - "15672:15672"
-    healthcheck:
-      test: rabbitmq-diagnostics check_port_connectivity
-      interval: 10s
-      timeout: 5s
-      retries: 5  
-      start_period: 10s
-    extends:                                       
-      file: common-config.yml                         
-      service: network-deploy-services
+  # rabitmq:
+  #   image: rabbitmq:3.13-management
+  #   hostname: rabitmq
+  #   ports: 
+  #     - "5672:5672"
+  #     - "15672:15672"
+  #   healthcheck:
+  #     test: rabbitmq-diagnostics check_port_connectivity
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5  
+  #     start_period: 10s
+  #   extends:                                       
+  #     file: common-config.yml                         
+  #     service: network-deploy-services
   
-  configServer:
+  configserver:
     build: 
       context: ../../config-server/          # searches for Dockerfile and builds the image and starts the container. So no need to manually run docker build
-    container-name: config-server
+    container_name: config-server
     ports:
       - "8091:8091"
-    depends_on:
-      rabitmq:
-        condition: service_healthy
+    # depends_on:
+    #   rabitmq:
+    #     condition: service_healthy
     healthcheck:  # instructions to evaluate wheather CS is up with liveness and readiness or not
-      test: "curl --fail --silent localhost:8091/actuator/health | grep UP || exit 1"
+      test: "curl --fail --silent http://localhost:8091/actuator/health/readiness | grep UP || exit 1"
       interval: 10s
       timeout: 5s
       retries: 5  # retries for 5 times with interval of 10 seconds $ wait for 5 seconds internally for the response
@@ -35,8 +35,9 @@ services:
       file: common-config.yml                         
       service: base_configs
   
-  laboratoryDB:
+  laboratorydb:
     image: postgres
+    container_name: laboratoryDB
     ports:
       - "5432:5432"
     environment:
@@ -46,33 +47,98 @@ services:
     volumes:
       - laboratoryData:/var/lib/postgres/data/
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres"]
+      test: ["CMD", "pg_isready", "-U", "root", "-d", "laboratoryDB"]
       interval: 30s
       timeout: 10s
       retries: 3
+    extends:                                       
+      file: common-config.yml                         
+      service: network-deploy-services
   
   lab-user-management:
-    image: lab-user-management:0.0.1-SNAPSHOT
+    # image: lab-user-management:0.0.1-SNAPSHOT
+    build: 
+      context: ../../lab-user-management/
     ports:
       - "8081:8081"
+    healthcheck:  
+      test: "curl --fail --silent http://localhost:8081/user/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 5  # retries for 5 times with interval of 10 seconds $ wait for 5 seconds internally for the response
+      start_period: 45s
+    container_name: lab-user-management  
     environment:
-      SPRING_APPLICATION_NAME: lab-user-management  # reason to add here is defect in SCCS
+      SPRING_APPLICATION_NAME: lab-user-management  
     extends:                                       
       file: common-config.yml                         
       service: microservice_depends_on_configs
-  
+    depends_on:            # service depends on other and wait untill below services are started and is healthy then starts micro service
+      lab-reports:
+        condition: service_healthy
+
   lab-reports:
     #image: vinodg8073/lab_report:v1
     build: 
-      context: ../../lab-reports/          # searches for Dockerfile and builds the image and starts the container. So no need to manually run docker build
+      context: ../../lab-reports/   
+    container_name: lab-reports       
     ports:
       - "8080:8080"
+    healthcheck:  
+      test: "curl --fail --silent http://localhost:8080/reports/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
     environment:
-      SPRING_APPLICATION_NAME: lab-user-management
+      SPRING_APPLICATION_NAME: lab-reports
     extends:                                       
       file: common-config.yml                         
       service: microservice_depends_on_configs
+    depends_on:            #When depends_on defined under common configs then the configs cannot be extended
+      laboratorydb:
+        condition: service_healthy      # Health check should be defined for the service or else you can also simply add "- laboratoryDB" under "depends_on:"
+      eurekaserver:
+        condition: service_healthy
+      configserver:
+        condition: service_healthy
 
+  eurekaserver:
+    build: 
+      context: ../../eureka-server/
+    container_name: eureka-server          
+    ports:
+      - "8092:8092"
+    healthcheck:  # liveness and readiness 
+      test: "curl --fail --silent http://localhost:8092/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 10s
+      retries: 5  
+      start_period: 10s  
+    extends:                                       
+      file: common-config.yml                         
+      service: config_server_configs  #No need of mq related properties here
+    environment:
+      SPRING_APPLICATION_NAME: eureka-server
+    depends_on:           
+      configserver:
+        condition: service_healthy
+  
+  gatewayserver:
+    build: 
+      context: ../../gateway-server/
+    container_name: lab-gateway-server
+    ports:
+      - "8093:8093"
+    environment:
+      SPRING_APPLICATION_NAME: gateway-server
+    extends:                                       
+      file: common-config.yml                         
+      service: microservice_depends_on_configs
+    depends_on:    
+      lab-user-management:  
+        condition: service_healthy
+      
 networks:
   laboratory:
     driver: "bridge"

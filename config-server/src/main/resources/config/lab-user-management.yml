@@ -55,9 +55,17 @@ management:  # by default actuator doesn't expose
   info:  #enabled info related actuator endpoint
     env:
       enabled: true
+  health:   
+    readinessstate:
+      enabled: true
+    livenessstate:
+      enabled: true
   endpoint: #Enable shutdown related actuator endpoint (but not exposed -- see below)and allow to shutdown gracefully
     shutdown:
-      enabled: true 
+      enabled: true
+    health:
+      probes:
+        enabled: true 
 #To expose the shutdown related api endpoints
 endpoints:
   shutdown:

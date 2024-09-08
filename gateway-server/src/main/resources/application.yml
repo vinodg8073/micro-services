@@ -12,7 +12,7 @@ spring:
       #HTTP Timeout configs
 #      httpclient:  #applicable for all paths except circuit breaker configued [Can also specify to path for route in CB filter configs]
 #        connect-timeout: 1000  #Time take by gateway server to get connection w/ microservice
-#        response-timeout: 3s #Max time to receive response from microservice
+#        response-timeout: 3s #Max time to receive response from microservice [would take more time in local and could become inconvenient]
   data:
     redis:
       connect-timeout: 2s

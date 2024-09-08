@@ -10,18 +10,22 @@ services:
       resources: 
         limits:
           memory: 700m
-    environment:
-      SPRING_RABITMQ_HOST: "rabitmq" # This is service name not hostname for connection application.properties
-      
-  microservice_depends_on_configs:
+    # environment:
+    #   SPRING_RABITMQ_HOST: "rabitmq" # This is service name not hostname for connection application.properties
+
+  config_server_configs:
     extends:
       service: base_configs
     environment:
-      SPRING_CONFIG_IMPORT: configserver:http://configServer:8091/
-      SPRING_DATASOURCE_URL: jdbc:postgresql://laboratoryDB:5432/laboratoryDB
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8091/ 
+        
+  
+  microservice_depends_on_configs:
+    extends:
+      service: config_server_configs
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://laboratorydb:5432/laboratoryDB
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8092/eureka/
       SPRING_PROFILES_ACTIVE: default  # set and use default env configs files while running locally
-    depends_on:            # service depends on other and wait untill laboratoryDB is started and is healthy then starts micro service
-      laboratoryDB:
-        condition: service_healthy      # Health check should be defined for the service or else you can also simply add "- laboratoryDB" under "depends_on:"
-      configServer:
-        condition: service_healthy  
+    
+  
