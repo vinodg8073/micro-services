@@ -1,4 +1,3 @@
-# Use an OpenJDK base image
 FROM openjdk:17-jdk-slim AS build
 
 RUN apt-get update && apt-get install -y maven curl

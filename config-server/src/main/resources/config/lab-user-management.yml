@@ -65,7 +65,10 @@ management:  # by default actuator doesn't expose
       enabled: true
     health:
       probes:
-        enabled: true 
+        enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name} 
 #To expose the shutdown related api endpoints
 endpoints:
   shutdown:
