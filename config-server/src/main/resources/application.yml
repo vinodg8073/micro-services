@@ -37,7 +37,10 @@ management:
   endpoint:  # enable the endpoint to read the health related information 
     health:
       probes:
-        enabled: true       
+        enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}       
 server:
   port: 8091
     
