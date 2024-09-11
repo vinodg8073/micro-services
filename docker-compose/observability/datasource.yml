@@ -18,6 +18,20 @@ datasources:
     editable: true
     jsonData:
       httpMethod: GET
+  - name: Tempo
+    type: tempo
+    uid: tempo
+    url: http://tempo:3100
+    access: proxy
+    orgId: 1
+    basicAuth: false
+    isDefault: false
+    version: 1
+    editable: true
+    jsonData:
+      httpMethod: GET
+      serviceMap:
+        datasourceUid: 'prometheus'
   - name: Loki
     type: loki
     uid: loki
@@ -29,7 +43,7 @@ datasources:
       httpHeaderName1: "X-Scope-OrgID"
       derivedFields:
         - datasourceUid: tempo
-          matcherRegex: "\\[.+,(.+),.+\\]"
+          matcherRegex: "\\[.+,(.+),.+\\]"  #pattern to find the value of trace_id out of [tagName,traceId,spanId] to navigate to the tempo
           name: TraceID
           url: '$${__value.raw}'
     secureJsonData:

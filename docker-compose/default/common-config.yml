@@ -10,7 +10,10 @@ services:
       resources: 
         limits:
           memory: 700m
-    # environment:
+    environment:
+      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.33.6.jar"
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
+      OTEL_METRICS_EXPORTER: none
     #   SPRING_RABITMQ_HOST: "rabitmq" # This is service name not hostname for connection application.properties
 
   config_server_configs:

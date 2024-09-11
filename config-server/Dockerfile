@@ -17,5 +17,6 @@ FROM openjdk:17-jdk-slim
 RUN apt-get update && apt-get install -y curl
 
 COPY --from=build /app/target/*.jar config-server.jar
+COPY --from=build /root/.m2/repository/io/opentelemetry/javaagent/opentelemetry-javaagent/*/opentelemetry-javaagent-*.jar /app/libs/
 
 ENTRYPOINT ["java", "-jar", "config-server.jar"]

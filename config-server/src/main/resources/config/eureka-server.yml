@@ -9,3 +9,7 @@ eureka:
     register-with-eureka: false # telling eureka server to not register itself and dont expose details into registry of service discovery
     service-url:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/  # eureka server expose its functionality and other MS try to connect and register/discover other service details
+      
+logging:
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"

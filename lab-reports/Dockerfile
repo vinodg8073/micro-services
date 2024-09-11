@@ -30,6 +30,9 @@ RUN apt-get update && apt-get install -y curl
 # Copy the JAR file from the previous stage to the runtime image
 COPY --from=build /app/target/*.jar lab-reports.jar
 
+#since the file is not accessible in .m2 path @ conatiner
+COPY --from=build /root/.m2/repository/io/opentelemetry/javaagent/opentelemetry-javaagent/*/opentelemetry-javaagent-*.jar /app/libs/
+
 # Specify the command to run your application
 CMD ["java", "-jar", "lab-reports.jar"]
 #CMD ["mvn", "mvn spring-boot:run"]
