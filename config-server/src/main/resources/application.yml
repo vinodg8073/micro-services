@@ -46,3 +46,7 @@ server:
     
 encrypt:     #Can encript, decrypt using same application based on below key using /encrypt , /decrypt endpoint
   key: 373HDS3828SHS7 # Any complex value || at real time configured from external
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"

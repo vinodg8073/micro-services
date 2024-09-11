@@ -20,4 +20,6 @@ RUN apt-get update && apt-get install -y curl
 
 COPY --from=build /app/target/*.jar lab-user-managemnt.jar
 
+COPY --from=build /root/.m2/repository/io/opentelemetry/javaagent/opentelemetry-javaagent/*/opentelemetry-javaagent-*.jar /app/libs/
+
 CMD ["java", "-jar", "lab-user-managemnt.jar"]
