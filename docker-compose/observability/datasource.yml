@@ -43,7 +43,7 @@ datasources:
       httpHeaderName1: "X-Scope-OrgID"
       derivedFields:
         - datasourceUid: tempo
-          matcherRegex: "\\[.+,(.+),.+\\]"
+          matcherRegex: "\\[.+,(.+),.+\\]"  #pattern to find the value of trace_id out of [tagName,traceId,spanId] to navigate to the tempo
           name: TraceID
           url: '$${__value.raw}'
     secureJsonData:
