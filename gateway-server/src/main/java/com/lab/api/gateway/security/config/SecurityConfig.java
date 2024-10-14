@@ -22,8 +22,8 @@ public class SecurityConfig {
 	@Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity serverHttpSecurity) {
         serverHttpSecurity.authorizeExchange(exchanges -> exchanges.pathMatchers(HttpMethod.GET,"/lab/reports/**").permitAll()  //first priority and ignores below
-                .pathMatchers("/lab/user/**").hasRole("LAB_ADMIN") //role/scope based. Expects the role like ROLE_ADMIN so use converter
-                .pathMatchers("/lab/reports/**").hasRole("LAB_USER")     //.authenticated()  //should be authenticated
+                .pathMatchers("/lab/user/**").hasRole("LAB-ADMIN") //role/scope based. Expects the role like ROLE_ADMIN so use converter
+                .pathMatchers("/lab/reports/**").authenticated()  //should be authenticated
                 )
                 .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
 //                		.jwt(Customizer.withDefaults())  //for default configuration
